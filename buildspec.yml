@@ -1,0 +1,10 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      # Sync all files to your S3 bucket
+      - aws s3 sync . s3://adi-portfolio-web --delete --exclude ".git/*" --exclude "buildspec.yml"
+
+      # Invalidate CloudFront cache so new version is visible
+      - aws cloudfront create-invalidation --distribution-id E1C4JGIRSODAXQ --paths "/*"
